@@ -26,37 +26,15 @@ package us.springett.cvss;
 final class CvssV4MaxSeverity {
 
     static int getMaxSeverity(String eq, int value) {
-        switch (eq) {
-            case "eq1":
-                return getEq1(value);
-            case "eq2":
-                return getEq2(value);
-            case "eq4":
-                return getEq4(value);
-            case "eq5":
-                return getEq5(value);
-            default:
-                throw new IllegalArgumentException("Invalid EQ: " + eq);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static int getMaxSeverityEq3Eq6(int eq3, int eq6) {
-        if (eq3 == 0 && eq6 == 0) {
-            return 7;
-        } else if (eq3 == 0 && eq6 == 1) {
-            return 6;
-        } else if (eq3 == 1 && eq6 == 0) {
-            return 8;
-        } else if (eq3 == 1 && eq6 == 1) {
-            return 8;
-        } else if (eq3 == 2 && eq6 == 1) {
-            return 10;
-        }
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static int getEq1(int value) {
-        switch (value) {
+        switch(value) {
             case 0:
                 return 1;
             case 1:
@@ -69,7 +47,7 @@ final class CvssV4MaxSeverity {
     }
 
     private static int getEq2(int value) {
-        switch (value) {
+        switch(value) {
             case 0:
                 return 1;
             case 1:
@@ -80,7 +58,7 @@ final class CvssV4MaxSeverity {
     }
 
     private static int getEq4(int value) {
-        switch (value) {
+        switch(value) {
             case 0:
                 return 6;
             case 1:
@@ -93,7 +71,7 @@ final class CvssV4MaxSeverity {
     }
 
     private static int getEq5(int value) {
-        switch (value) {
+        switch(value) {
             case 0:
             case 1:
             case 2:

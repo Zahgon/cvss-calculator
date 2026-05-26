@@ -24,10 +24,15 @@ package us.springett.cvss;
 public class Score {
 
     private final double baseScore;
+
     private final double impactSubScore;
+
     private final double exploitabilitySubScore;
+
     private final double temporalScore;
+
     private final double environmentalScore;
+
     private final double modifiedImpactSubScore;
 
     public Score(double baseScore, double impactSubScore, double exploitabilitySubScore) {
@@ -52,7 +57,7 @@ public class Score {
      * @return the base score
      */
     public double getBaseScore() {
-        return baseScore;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -60,7 +65,7 @@ public class Score {
      * @return the impact subscore
      */
     public double getImpactSubScore() {
-        return impactSubScore;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -68,7 +73,7 @@ public class Score {
      * @return the exploitability subscore
      */
     public double getExploitabilitySubScore() {
-        return exploitabilitySubScore;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -76,7 +81,7 @@ public class Score {
      * @return the temporal subscore
      */
     public double getTemporalScore() {
-        return temporalScore;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -84,7 +89,7 @@ public class Score {
      * @return the environmental score
      */
     public double getEnvironmentalScore() {
-        return environmentalScore;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -92,6 +97,6 @@ public class Score {
      * @return the modified impact subscore
      */
     public double getModifiedImpactSubScore() {
-        return modifiedImpactSubScore;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

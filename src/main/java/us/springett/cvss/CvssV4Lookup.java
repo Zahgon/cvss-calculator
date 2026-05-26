@@ -34,7 +34,6 @@ final class CvssV4Lookup {
 
     static {
         Map<String, Double> table = new HashMap<>(233);
-
         table.put("000000", 10.0);
         table.put("000001", 9.9);
         table.put("000010", 9.8);
@@ -305,20 +304,15 @@ final class CvssV4Lookup {
         table.put("212201", 1.0);
         table.put("212211", 0.3);
         table.put("212221", 0.1);
-
         LOOKUP_TABLE = Collections.unmodifiableMap(table);
     }
 
     static double lookupScore(String macroVector) {
-        Double score = LOOKUP_TABLE.get(macroVector);
-        if (score == null) {
-            throw new IllegalArgumentException("Invalid MacroVector: " + macroVector);
-        }
-        return score;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static boolean contains(String macroVector) {
-        return LOOKUP_TABLE.containsKey(macroVector);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private CvssV4Lookup() {

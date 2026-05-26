@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import static us.springett.cvss.Parser.requireNonNull;
 
 /**
@@ -36,375 +35,259 @@ public class CvssV3 implements Cvss {
     static final String VECTOR_PREFIX = "CVSS:3.0";
 
     protected static final double NO_VALUE = -1.0;
+
     protected static final double exploitabilityCoefficient = 8.22;
+
     protected static final double scopeCoefficient = 1.08;
 
     protected AttackVector av;
+
     protected AttackComplexity ac;
+
     protected PrivilegesRequired pr;
+
     protected UserInteraction ui;
+
     protected Scope s;
+
     protected Exploitability e = Exploitability.NOT_DEFINED;
+
     protected RemediationLevel rl = RemediationLevel.NOT_DEFINED;
+
     protected ReportConfidence rc = ReportConfidence.NOT_DEFINED;
+
     protected CIA c;
+
     protected CIA i;
+
     protected CIA a;
 
     public CvssV3 attackVector(AttackVector av) {
-        this.av = Objects.requireNonNull(av);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 attackComplexity(AttackComplexity ac) {
-        this.ac = Objects.requireNonNull(ac);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 privilegesRequired(PrivilegesRequired pr) {
-        this.pr = Objects.requireNonNull(pr);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 userInteraction(UserInteraction ui) {
-        this.ui = Objects.requireNonNull(ui);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 scope(Scope s) {
-        this.s = Objects.requireNonNull(s);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 confidentiality(CIA c) {
-        this.c = Objects.requireNonNull(c);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 integrity(CIA i) {
-        this.i = Objects.requireNonNull(i);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 availability(CIA a) {
-        this.a = Objects.requireNonNull(a);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 exploitability(Exploitability e) {
-        this.e = Objects.requireNonNull(e);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 remediationLevel(RemediationLevel rl) {
-        this.rl = Objects.requireNonNull(rl);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CvssV3 reportConfidence(ReportConfidence rc) {
-        this.rc = Objects.requireNonNull(rc);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static final class Parser implements us.springett.cvss.Parser<CvssV3> {
 
-        private static final List<String> MANDATORY_METRICS = Arrays.asList(
-                "AV", "AC", "PR", "UI", "S", "C", "I", "A" // Base metrics.
-        );
+        private static final List<String> MANDATORY_METRICS = Arrays.asList(// Base metrics.
+        "AV", // Base metrics.
+        "AC", // Base metrics.
+        "PR", // Base metrics.
+        "UI", // Base metrics.
+        "S", // Base metrics.
+        "C", // Base metrics.
+        "I", // Base metrics.
+        "A");
 
         @Override
         public CvssV3 parseVector(final String vector) {
-            if (vector == null || vector.isEmpty()) {
-                throw new MalformedVectorException("Vector must not be null or empty");
-            }
-
-            final String[] segments = vector.split("/");
-            if (segments.length < (1 + MANDATORY_METRICS.size())) {
-                throw new MalformedVectorException(String.format(
-                        "Vector must consist of at least %d segments (%s prefix and mandatory metrics %s), but has only %s",
-                        (1 + MANDATORY_METRICS.size()), VECTOR_PREFIX, String.join(", ", MANDATORY_METRICS), segments.length
-                ));
-            }
-            if (!VECTOR_PREFIX.equals(segments[0])) {
-                throw new MalformedVectorException("Missing \"" + VECTOR_PREFIX + "\" prefix");
-            }
-
-            final CvssV3 cvss = new CvssV3();
-            final Set<String> metricsSeen = new HashSet<>();
-            for (int i = 1; i < segments.length; i++) {
-                final String[] metricParts = segments[i].split(":", 2);
-                if (metricParts.length < 2) {
-                    throw new MalformedVectorException(String.format(
-                            "Segment #%d is malformed; Expected format <METRIC>:<VALUE>, but got \"%s\"",
-                            (i + 1), segments[i]
-                    ));
-                }
-
-                final String metric = metricParts[0];
-                final char metricValue = metricParts[1].charAt(0);
-
-                switch (metric) {
-                    // Base.
-                    case "AV":
-                        cvss.attackVector(requireNonNull(metric, metricValue, AttackVector::fromChar));
-                        break;
-                    case "AC":
-                        cvss.attackComplexity(requireNonNull(metric, metricValue, AttackComplexity::fromChar));
-                        break;
-                    case "PR":
-                        cvss.privilegesRequired(requireNonNull(metric, metricValue, PrivilegesRequired::fromChar));
-                        break;
-                    case "UI":
-                        cvss.userInteraction(requireNonNull(metric, metricValue, UserInteraction::fromChar));
-                        break;
-                    case "S":
-                        cvss.scope(requireNonNull(metric, metricValue, Scope::fromChar));
-                        break;
-                    case "C":
-                        cvss.confidentiality(requireNonNull(metric, metricValue, CIA::fromString));
-                        break;
-                    case "I":
-                        cvss.integrity(requireNonNull(metric, metricValue, CIA::fromString));
-                        break;
-                    case "A":
-                        cvss.availability(requireNonNull(metric, metricValue, CIA::fromString));
-                        break;
-                    // Temporal.
-                    case "E":
-                        cvss.exploitability(requireNonNull(metric, metricValue, Exploitability::fromChar));
-                        break;
-                    case "RL":
-                        cvss.remediationLevel(requireNonNull(metric, metricValue, RemediationLevel::fromChar));
-                        break;
-                    case "RC":
-                        cvss.reportConfidence(requireNonNull(metric, metricValue, ReportConfidence::fromChar));
-                        break;
-                    // Environmental.
-                    case "CR":
-                    case "IR":
-                    case "AR":
-                    case "MAV":
-                    case "MAC":
-                    case "MPR":
-                    case "MUI":
-                    case "MS":
-                    case "MC":
-                    case "MI":
-                    case "MA":
-                        // TODO: Handle these (https://github.com/stevespringett/cvss-calculator/issues/66).
-                        break;
-                    default:
-                        throw new MalformedVectorException("Unknown metric: " + metric);
-                }
-
-                metricsSeen.add(metric);
-            }
-
-            final List<String> missingMetrics = MANDATORY_METRICS.stream()
-                    .filter(metric -> !metricsSeen.contains(metric))
-                    .collect(Collectors.toList());
-            if (!missingMetrics.isEmpty()) {
-                throw new MalformedVectorException("Missing mandatory metrics: " + String.join(", ", missingMetrics));
-            }
-
-            return cvss;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
     }
 
     public enum AttackVector {
-        NETWORK(0.85, 'N'),
-        ADJACENT(0.62, 'A'),
-        LOCAL(0.55, 'L'),
-        PHYSICAL(0.2, 'P');
+
+        NETWORK(0.85, 'N'), ADJACENT(0.62, 'A'), LOCAL(0.55, 'L'), PHYSICAL(0.2, 'P');
 
         protected final double weight;
+
         protected final char shorthand;
+
         AttackVector(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static AttackVector fromChar(char c) {
-            for (AttackVector e : AttackVector.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public enum AttackComplexity {
-        LOW(0.77, 'L'),
-        HIGH(0.44, 'H');
+
+        LOW(0.77, 'L'), HIGH(0.44, 'H');
 
         protected final double weight;
+
         protected final char shorthand;
+
         AttackComplexity(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static AttackComplexity fromChar(char c) {
-            for (AttackComplexity e : AttackComplexity.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    public enum PrivilegesRequired  {
-        NONE(0.85, 0.85, 'N'),
-        LOW(0.62, 0.68, 'L'),
-        HIGH(0.27, 0.5, 'H');
+    public enum PrivilegesRequired {
+
+        NONE(0.85, 0.85, 'N'), LOW(0.62, 0.68, 'L'), HIGH(0.27, 0.5, 'H');
 
         protected final double weight;
+
         protected final double scopeChangedWeight;
+
         protected final char shorthand;
+
         PrivilegesRequired(double weight, double scopeChangedWeight, char shorthand) {
             this.weight = weight;
             this.scopeChangedWeight = scopeChangedWeight;
             this.shorthand = shorthand;
         }
+
         public static PrivilegesRequired fromChar(char c) {
-            for (PrivilegesRequired e : PrivilegesRequired.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public enum UserInteraction {
-        NONE(0.85, 'N'),
-        REQUIRED(0.62, 'R');
+
+        NONE(0.85, 'N'), REQUIRED(0.62, 'R');
 
         protected final double weight;
+
         protected final char shorthand;
+
         UserInteraction(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static UserInteraction fromChar(char c) {
-            for (UserInteraction e : UserInteraction.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     public enum Scope {
-        UNCHANGED(6.42, 'U'),
-        CHANGED(7.52, 'C');
+
+        UNCHANGED(6.42, 'U'), CHANGED(7.52, 'C');
 
         protected final double weight;
+
         protected final char shorthand;
+
         Scope(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static Scope fromChar(char c) {
-            for (Scope e : Scope.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
     // Temporal
     public enum Exploitability {
-        UNPROVEN(0.91, 'U'),
-        POC(0.94, 'P'),
-        FUNCTIONAL(0.97, 'F'),
-        HIGH(1.0, 'H'),
-        NOT_DEFINED(1.0, 'X'),;
+
+        UNPROVEN(0.91, 'U'), POC(0.94, 'P'), FUNCTIONAL(0.97, 'F'), HIGH(1.0, 'H'), NOT_DEFINED(1.0, 'X');
 
         protected final double weight;
+
         protected final char shorthand;
+
         Exploitability(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static Exploitability fromChar(char c) {
-            for (Exploitability e : Exploitability.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    public enum RemediationLevel  {
-        UNAVAILABLE(1.0, 'U'),
-        WORKAROUND(0.97, 'W'),
-        TEMPORARY(0.96, 'T'),
-        OFFICIAL(0.95, 'O'),
-        NOT_DEFINED(1.0, 'X'),;
+    public enum RemediationLevel {
+
+        UNAVAILABLE(1.0, 'U'), WORKAROUND(0.97, 'W'), TEMPORARY(0.96, 'T'), OFFICIAL(0.95, 'O'), NOT_DEFINED(1.0, 'X');
 
         protected final double weight;
+
         protected final char shorthand;
-        RemediationLevel (double weight, char shorthand) {
+
+        RemediationLevel(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static RemediationLevel fromChar(char c) {
-            for (RemediationLevel e : RemediationLevel.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    public enum ReportConfidence  {
-        UNKNOWN(0.92, 'U'),
-        REASONABLE(0.96, 'R'),
-        CONFIRMED(1.0, 'C'),
-        NOT_DEFINED(1.0, 'X'),;
+    public enum ReportConfidence {
+
+        UNKNOWN(0.92, 'U'), REASONABLE(0.96, 'R'), CONFIRMED(1.0, 'C'), NOT_DEFINED(1.0, 'X');
 
         protected final double weight;
+
         protected final char shorthand;
-        ReportConfidence (double weight, char shorthand) {
+
+        ReportConfidence(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static ReportConfidence fromChar(char c) {
-            for (ReportConfidence e : ReportConfidence.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
-    // End-Temporal
 
+    // End-Temporal
     public enum CIA {
-        NONE(0, 'N'),
-        LOW(0.22, 'L'),
-        HIGH(0.56, 'H');
+
+        NONE(0, 'N'), LOW(0.22, 'L'), HIGH(0.56, 'H');
 
         protected final double weight;
+
         protected final char shorthand;
+
         CIA(double weight, char shorthand) {
             this.weight = weight;
             this.shorthand = shorthand;
         }
+
         public static CIA fromString(char c) {
-            for (CIA e : CIA.values()) {
-                if (e.shorthand==c) {
-                    return e;
-                }
-            }
-            return null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -412,38 +295,7 @@ public class CvssV3 implements Cvss {
      * {@inheritDoc}
      */
     public Score calculateScore() {
-        final double prWeight = (Scope.UNCHANGED == s) ? pr.weight : pr.scopeChangedWeight;
-        final double baseScore;
-        final double impactSubScore;
-        final double exploitabalitySubScore = exploitabilityCoefficient * av.weight * ac.weight * prWeight * ui.weight;
-        final double impactSubScoreMultiplier = (1 - ((1 - c.weight) * (1 - i.weight) * (1 - a.weight)));
-        final double temporalScore;
-
-        if (Scope.UNCHANGED == s) {
-            impactSubScore = s.weight * impactSubScoreMultiplier;
-        } else {
-            impactSubScore = s.weight * (impactSubScoreMultiplier - 0.029) - 3.25 * Math.pow(impactSubScoreMultiplier - 0.02, 15);
-        }
-
-        if (impactSubScore <= 0) {
-            baseScore = 0;
-        } else {
-            if (Scope.UNCHANGED == s) {
-                baseScore = roundUp1(Math.min((exploitabalitySubScore + impactSubScore), 10));
-            } else {
-                baseScore = roundUp1(Math.min((exploitabalitySubScore + impactSubScore) * scopeCoefficient, 10));
-            }
-        }
-
-        if (e != null && e.weight != NO_VALUE &&
-                rl != null && rl.weight != NO_VALUE &&
-                rc != null && rc.weight != NO_VALUE) {
-            temporalScore = roundUp1(baseScore * e.weight * rl.weight * rc.weight);
-        } else {
-            temporalScore = NO_VALUE;
-        }
-
-        return new Score(baseScore, roundNearestTenth(impactSubScore), roundNearestTenth(exploitabalitySubScore), temporalScore);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private double roundUp1(double d) {
@@ -451,93 +303,67 @@ public class CvssV3 implements Cvss {
     }
 
     protected double roundNearestTenth(double d) {
-        if (d < 0) {
-            return 0;
-        }
-
-        return Math.round(d * 10.0) / 10.0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String getName() {
-        return VECTOR_PREFIX;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
      */
     public String getVector() {
-        final List<String> vectorParts = new ArrayList<>(Arrays.asList(
-                VECTOR_PREFIX,
-                "AV:" + av.shorthand,
-                "AC:" + ac.shorthand,
-                "PR:" + pr.shorthand,
-                "UI:" + ui.shorthand,
-                "S:" + s.shorthand,
-                "C:" + c.shorthand,
-                "I:" + i.shorthand,
-                "A:" + a.shorthand
-        ));
-
-        if (e != Exploitability.NOT_DEFINED) {
-            vectorParts.add("E:" + e.shorthand);
-        }
-        if (rl != RemediationLevel.NOT_DEFINED) {
-            vectorParts.add("RL:" + rl.shorthand);
-        }
-        if (rc != ReportConfidence.NOT_DEFINED) {
-            vectorParts.add("RC:" + rc.shorthand);
-        }
-
-        return String.join("/", vectorParts);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public AttackVector getAttackVector() {
-        return av;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public AttackComplexity getAttackComplexity() {
-        return ac;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public PrivilegesRequired getPrivilegesRequired() {
-        return pr;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public UserInteraction getUserInteraction() {
-        return ui;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Scope getScope() {
-        return s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Exploitability getExploitability() {
-        return e;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public RemediationLevel getRemediationLevel() {
-        return rl;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public ReportConfidence getReportConfidence() {
-        return rc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CIA getConfidentiality() {
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CIA getIntegrity() {
-        return i;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public CIA getAvailability() {
-        return a;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return getVector();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

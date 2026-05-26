@@ -22,18 +22,10 @@ interface Parser<T extends Cvss> {
     T parseVector(String vector);
 
     static <E extends Enum<?>> E requireNonNull(final String metric, final char value, final Function<Character, E> function) {
-        final E result = function.apply(value);
-        if (result == null) {
-            throw new MalformedVectorException("Invalid value for metric " + metric + ": " + value);
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     static <E extends Enum<?>> E requireNonNull(final String metric, final String value, final Function<String, E> function) {
-        final E result = function.apply(value);
-        if (result == null) {
-            throw new MalformedVectorException("Invalid value for metric " + metric + ": " + value);
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
